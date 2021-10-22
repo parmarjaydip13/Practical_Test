@@ -1,0 +1,41 @@
+﻿@model PracticalTask.Models.BookViewModel
+
+<form asp-action="Add" asp-controller="Book">
+    <div class="form-group">
+        <label>Name</label>
+        <input class="form-control" asp-for="Name" maxlength="150" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Price</label>
+        <input class="form-control" asp-for="Price"  type="text" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Publish Date</label>
+        <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+            <input type="text" asp-for="PublishDate" class="form-control" data-target="#datetimepicker1">
+            <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+            </div>
+        </div>
+        <span asp-validation-for="PublishDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Quantity</label>
+        <input class="form-control" asp-for="Quantity" maxlength="10" type="text" />
+        <span asp-validation-for="Quantity" class="text-danger"></span>
+    </div>
+
+    <input type="hidden" asp-for="BookId" />
+    <input type="hidden" asp-for="AuthorId" />
+
+    <button type="button" id="btnClose" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    <button type="button" onclick="AddUpdateBook(event)" class="btn btn-primary">Save</button>
+
+    @*<button class="btn btn-secondary" type="button" onclick='location.href = "@Url.Action("Index","Author")"'>Back</button>
+        <button class="btn btn-primary">Update</button>*@
+</form>
