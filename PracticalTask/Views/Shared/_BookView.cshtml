@@ -1,9 +1,9 @@
 ﻿@model PracticalTask.Models.BookViewModel
 
-<form asp-action="Add" asp-controller="Book">
+<form asp-action="Add" asp-controller="Book" id="formbook">
     <div class="form-group">
         <label>Name</label>
-        <input class="form-control" asp-for="Name" maxlength="150" />
+        <input class="form-control" asp-for="Name" maxlength="50" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
 

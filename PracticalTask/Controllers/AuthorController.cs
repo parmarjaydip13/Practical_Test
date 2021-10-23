@@ -35,15 +35,25 @@ namespace PracticalTask.Controllers
         [HttpPost]
         public IActionResult Add(AuthorViewModel viewModel)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(viewModel);
-            }
 
-            var author = new Author { Name = viewModel.Name, Email = viewModel.Email, PhoneNumber = viewModel.PhoneNumber };
-            _unitOfWork.Authors.Add(author);
-            _unitOfWork.Complete();
-            return View(viewModel);
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return View(viewModel);
+                }
+
+                var author = new Author { Name = viewModel.Name, Email = viewModel.Email, PhoneNumber = viewModel.PhoneNumber };
+                _unitOfWork.Authors.Add(author);
+                _unitOfWork.Complete();
+
+                return RedirectToAction("Index", "Author");
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log error 
+                throw;
+            }
         }
 
         [HttpGet]
@@ -93,6 +103,7 @@ namespace PracticalTask.Controllers
             }
             catch (Exception ex)
             {
+                //TODO: Log error 
                 return new JsonResult("Error") { StatusCode = (int)HttpStatusCode.InternalServerError };
             }
         }
@@ -100,18 +111,29 @@ namespace PracticalTask.Controllers
         [HttpDelete]
         public IActionResult Delete(int? id)
         {
-            if (id.HasValue)
+
+            try
             {
-                var author = _unitOfWork.Authors.GetById(id.Value);
-                if (author != null)
+                if (id.HasValue)
                 {
-                    var books = _unitOfWork.Books.Find(x => x.Author.AuthorId == author.AuthorId && x.IsDelete != true);
-                    books.ToList().ForEach(c => c.IsDelete = true);
-                    author.IsDelete = true;
+                    var author = _unitOfWork.Authors.GetById(id.Value);
+                    if (author != null)
+                    {
+                        var books = _unitOfWork.Books.Find(x => x.Author.AuthorId == author.AuthorId && x.IsDelete != true);
+                        books.ToList().ForEach(c => c.IsDelete = true);
+                        author.IsDelete = true;
+                    }
+                    _unitOfWork.Complete();
                 }
-                _unitOfWork.Complete();
+                return Ok();
             }
-            return Ok();
+            catch (Exception ex)
+            {
+                //TODO: Log error 
+                throw;
+            }
+            
+           
         }
     }
 }

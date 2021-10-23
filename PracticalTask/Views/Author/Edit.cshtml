@@ -52,7 +52,7 @@
 
 <div class="row">
     <div class="col-md-12 text-right mb-2">
-        <button class="btn btn-primary" data-toggle="modal" data-target="#modelBook">Add Book Record</button>
+        <button class="btn btn-primary" onclick="openModel(event)">Add Book Record</button>
     </div>
 </div>
 
@@ -108,7 +108,7 @@
 
 
     <script>
-          var table = "";
+        var table = "";
 
           $(document).ready(function () {
               $.fn.dataTable.moment('DD-MM-YYYY');
@@ -227,8 +227,6 @@
             //
 
         function AddUpdateBook(event) {
-             $('#modelBook').modal('hide')
-
             if ($(event.target).closest('form').valid()) {
                     $.ajax({
                         url: '@Url.Action("AddUpdate","Book")',
@@ -237,15 +235,35 @@
                         data: $(event.target).closest('form').serialize(),
                         success: function (data) {
                             table.ajax.reload();
+                            $('#modelBook').modal('hide')
                         }
                     });
                 }
         }
 
 
+        function openModel(event) {
+
+            $("#formbook").trigger('reset')
+            $('#modelBook').modal('show')
+            $('.input-validation-error').addClass('input-validation-valid');
+            $('.input-validation-error').removeClass('input-validation-error');
+            //Removes validation message after input-fields
+
+            $('.field-validation-valid > span').remove();
+            $('.field-validation-error').addClass('field-validation-valid');
+            $('.field-validation-error').removeClass('field-validation-error');
+
+            //Removes validation summary
+            $('.validation-summary-errors').addClass('validation-summary-valid');
+            $('.validation-summary-errors').removeClass('validation-summary-errors');
+
+           
+
+        }
+
             //delete record for book
              function DeleteRecord(id) {
-
             if (confirm('Are you sure you want to delete this record.')) {
 
                 $.ajax({
